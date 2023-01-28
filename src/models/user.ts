@@ -1,5 +1,6 @@
 import mongoose, { Schema, model } from 'mongoose';
 import validator from 'validator';
+import bcrypt from 'bcryptjs';
 
 export enum UserRoleEnum {
   ADMIN = 'ADMIN',
@@ -11,8 +12,11 @@ export interface IUser {
   password: string;
   role: UserRoleEnum;
 }
+export interface IHashComparable {
+    comparePasswordHash():boolean;
+}
 
-const UserSchema = new Schema<IUser>({
+const UserSchema = new Schema<IUser,IHashComparable>({
   name: {
     type: String,
     required: [
@@ -40,4 +44,12 @@ const UserSchema = new Schema<IUser>({
   }
 });
 
+UserSchema.pre('save', async function name() {
+    const salt = await bcrypt.genSalt(10);
+    this.password=await bcrypt.hash(this.password, salt)
+})
+UserSchema.method('comparePasswordHash',async function (inputPassword){
+    const isMatch = await bcrypt.compare(inputPassword, this.password);
+    return true; 
+})
 export const User = model<IUser>('User', UserSchema);
