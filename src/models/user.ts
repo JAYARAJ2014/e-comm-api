@@ -1,4 +1,5 @@
-import {Schema, model} from 'mongoose'
+import mongoose, {Schema, model} from 'mongoose'
+import validator from 'validator';
 
 export enum UserRoleEnum {
     ADMIN="ADMIN",
@@ -20,8 +21,9 @@ const UserSchema = new Schema<IUser>({
     },
     email: {
         type: String, 
+        validate: [validator.isEmail ,'Please provide a valid email address'],
         required: [true,'Please provide a valid email address'],
-       
+        unique:true
     },
     password: {
         type:String,
