@@ -2,8 +2,7 @@ import { Router } from 'express';
 
 import 'express-async-errors';
 import { handleAsyncMiddleware, authMiddleware } from '../middlewares/';
-import { authHandler } from  '../handlers/auth'
-
+import { authHandler } from '../handlers/auth';
 
 export const authRouter: Router = Router();
 

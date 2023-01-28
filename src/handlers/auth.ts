@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { User } from '../models/user';
 import { StatusCodes } from 'http-status-codes';
-import { BadRequestError,UnAuthorizedError } from '../custom-errors/';
+import { BadRequestError, UnAuthorizedError } from '../custom-errors/';
 import bcrypt from 'bcryptjs';
 
 class AuthHandler {
@@ -55,8 +55,8 @@ class AuthHandler {
     return res.status(StatusCodes.OK).json({ name: user.name, token });
   }
 
-  public async logout(req:Request, res:Response){
-    res.status(StatusCodes.OK).json({message:'Logged out'})
+  public async logout(req: Request, res: Response) {
+    res.status(StatusCodes.OK).json({ message: 'Logged out' });
   }
 }
 
