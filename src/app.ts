@@ -13,9 +13,7 @@ const app: Express = express();
 app.use(morgan('tiny'))
 
 app.use(express.json());
-app.use('/', (req: Request, res: Response) => {
-  return res.status(StatusCodes.OK).json({ message: 'e-commerce API' });
-});
+app.use('/', (req: Request, res: Response) => res.status(StatusCodes.OK).json({ message: 'e-commerce API' }));
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware)
