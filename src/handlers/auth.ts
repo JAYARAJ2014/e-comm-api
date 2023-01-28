@@ -17,7 +17,9 @@ class AuthHandler {
     const firstUser: boolean = await User.countDocuments({})===0;
     const role = firstUser ? 'ADMIN' :'USER'
     const user = await User.create({name, email, password,role})
-    res.status(StatusCodes.CREATED).json(user)
+    const tokenPayload = {name:user.name, userId:user._id, role:user.role}
+    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET||'',{expiresIn:process.env.JWT_LIFETIME ||'1d' }  )
+    res.status(StatusCodes.CREATED).json({user:tokenPayload,token})
 
   }
   public async login(req: Request, res: Response) {
