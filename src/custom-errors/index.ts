@@ -4,4 +4,10 @@ import { ForbiddenError } from './forbidden';
 import { NotFoundError } from './not-found';
 import { UnAuthorizedError } from './unathorized';
 
-export { CustomApiError, BadRequestError, NotFoundError, UnAuthorizedError, ForbiddenError };
+export {
+  CustomApiError,
+  BadRequestError,
+  NotFoundError,
+  UnAuthorizedError,
+  ForbiddenError
+};

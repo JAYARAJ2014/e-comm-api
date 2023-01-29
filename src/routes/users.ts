@@ -10,13 +10,24 @@ export const usersRouter: Router = Router();
 
 usersRouter
   .route('/')
-  .get(authMiddleware.authenticate,authMiddleware.authorizeRole('ADMIN'), handleAsyncMiddleware(usersHandler.getAllUsers));
-usersRouter
-  .route('/:id')
-  .get(authMiddleware.authenticate,authMiddleware.authorize, handleAsyncMiddleware(usersHandler.getSingleUser));
+  .get(
+    authMiddleware.authenticate,
+    authMiddleware.authorizeByRole(UserRoleEnum.ADMIN),
+    handleAsyncMiddleware(usersHandler.getAllUsers)
+  );
+
 usersRouter
   .route('/current')
-  .get(handleAsyncMiddleware(usersHandler.showCurrentUser));
+  .get(
+    authMiddleware.authenticate,
+    handleAsyncMiddleware(usersHandler.showCurrentUser)
+  );
+usersRouter
+  .route('/:id')
+  .get(
+    authMiddleware.authenticate,
+    handleAsyncMiddleware(usersHandler.getSingleUser)
+  );
 usersRouter.route('/:id').patch(handleAsyncMiddleware(usersHandler.updateUser));
 usersRouter
   .route('/password')

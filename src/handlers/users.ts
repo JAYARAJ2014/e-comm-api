@@ -36,7 +36,7 @@ export class UsersHandler {
     return res.status(StatusCodes.OK).json(user);
   }
   public async showCurrentUser(req: Request, res: Response) {
-    res.send('showCurrentUser');
+    res.status(StatusCodes.OK).json({ user: req.user });
   }
   public async updateUser(req: Request, res: Response) {
     res.send('updateUser');
