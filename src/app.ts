@@ -9,6 +9,7 @@ import {
 } from './middlewares';
 import morgan from 'morgan';
 import { authRouter } from './routes/auth';
+import cookieParser from 'cookie-parser';
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
@@ -20,11 +21,14 @@ const app: Express = express();
 app.use(morgan(MORGAN_LOG_FORMAT));
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(`${BASE_URL}/auth`, authRouter);
-app.use('/', (req: Request, res: Response) =>
-  res.status(StatusCodes.OK).json({ message: 'e-commerce API' })
-);
+app.use('/', (req: Request, res: Response) => {
+  console.log(req.cookies);
+
+  res.status(StatusCodes.OK).json({ message: 'e-commerce API' });
+});
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
