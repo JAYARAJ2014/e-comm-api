@@ -26,7 +26,12 @@ class AuthHandler {
     res.status(StatusCodes.CREATED).json({ user: tokenPayload });
   }
   public async login(req: Request, res: Response) {
+    console.log(req.body);
     const { email, password } = req.body;
+    if (!email || !password) {
+      throw new UnAuthorizedError('Please provide email and password');
+    }
+
     const user = await User.findOne({ email: email });
     if (!user) {
       throw new UnAuthorizedError('User does not exist. Please register');
@@ -45,6 +50,9 @@ class AuthHandler {
   }
 
   public async logout(req: Request, res: Response) {
+    res.cookie('token', undefined, {
+      expires: new Date(Date.now())
+    });
     res.status(StatusCodes.OK).json({ message: 'Logged out' });
   }
 }
