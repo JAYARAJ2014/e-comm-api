@@ -27,6 +27,20 @@ class AuthHandler {
   }
   public async login(req: Request, res: Response) {
     const { email, password } = req.body;
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      throw new UnAuthorizedError('User does not exist. Please register');
+    }
+
+    const doesPasswordsMatch = await user.comparePasswordHash(password);
+    console.log(doesPasswordsMatch);
+
+    if (!doesPasswordsMatch) {
+      throw new UnAuthorizedError('UserId Or Password Incorrect');
+    }
+    const tokenPayload = { name: user.name, userId: user._id, role: user.role };
+    JwtUtil.attachCookiesToResponse(tokenPayload, res);
+
     return res.status(StatusCodes.OK).json({ name: 'hELLO' });
   }
 
