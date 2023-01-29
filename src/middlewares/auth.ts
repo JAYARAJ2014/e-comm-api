@@ -1,34 +1,32 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { UnAuthorizedError } from '../custom-errors/';
+import { JwtUtil } from '../utils';
+
 
 export const authMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { authorization } = req.headers;
-  console.log(authorization);
-  if (!authorization || !authorization.startsWith('Bearer')) {
-    req.user = null;
-    throw new UnAuthorizedError('Invalid Token. Access Denied');
+  const { token } = req.signedCookies;
+  console.log(token)
+  if (!token) {
+    throw new UnAuthorizedError('Authentication failed')
   }
-
-  const token = authorization.substring(7);
 
   try {
-    var payload: JwtPayload = (await jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    )) as JwtPayload;
-    console.log(`Payload: `, typeof payload);
-    req.user = { userId: payload.userId, username: payload.name };
-
-    // console.log(req.user);
+    const { name, userId, role }  = JwtUtil.tokenPayload(token) as JwtPayload;
+     
+    console.log(`Payload: `, name, userId, role)
+    req.user = {
+      name, userId, role
+    }
     next();
   } catch (error) {
-    req.user = null;
-    console.log(`Error in verifying JWT `, error);
-    throw new UnAuthorizedError('Invalid Token. Access Denied');
-  }
+    console.log(error) 
+    throw new UnAuthorizedError('Authentication failed')
+  } 
+   
+   
 };

@@ -10,13 +10,14 @@ import {
 import morgan from 'morgan';
 import { authRouter } from './routes/auth';
 import cookieParser from 'cookie-parser';
+import { usersRouter } from './routes/users';
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI || '';
 const BASE_URL = process.env.BASE_URL || '';
 const MORGAN_LOG_FORMAT = process.env.MORGAN_LOG_FORMAT || 'tiny';
-const COOKIE_SECRET = process.env.MORGAN_LOG_FORMAT || 'secret';
+const COOKIE_SECRET = process.env.COOKIE_SECRET || 'secret';
 const app: Express = express();
 app.use(morgan(MORGAN_LOG_FORMAT));
 
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use(cookieParser(COOKIE_SECRET));
 
 app.use(`${BASE_URL}/auth`, authRouter);
+app.use(`${BASE_URL}/users`, usersRouter);
 app.use('/', (req: Request, res: Response) => {
   console.log(req.signedCookies);
 
