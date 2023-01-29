@@ -10,11 +10,13 @@ export class JwtUtil {
     return token;
   }
 
-  public static attachResponseToCookies(payload: any, res: Response): void {
+  public static attachCookiesToResponse(payload: any, res: Response): void {
     const token = this.createJwtToken(payload);
     res.cookie('token', token, {
       maxAge: 24 * 60 * 60 * 1000,
-      httpOnly: true
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      signed: true
     });
   }
   public static tokenPayload(token: string): JwtPayload | string {

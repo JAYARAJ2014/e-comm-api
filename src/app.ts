@@ -16,16 +16,16 @@ const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI || '';
 const BASE_URL = process.env.BASE_URL || '';
 const MORGAN_LOG_FORMAT = process.env.MORGAN_LOG_FORMAT || 'tiny';
-
+const COOKIE_SECRET = process.env.MORGAN_LOG_FORMAT || 'secret';
 const app: Express = express();
 app.use(morgan(MORGAN_LOG_FORMAT));
 
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser(COOKIE_SECRET));
 
 app.use(`${BASE_URL}/auth`, authRouter);
 app.use('/', (req: Request, res: Response) => {
-  console.log(req.cookies);
+  console.log(req.signedCookies);
 
   res.status(StatusCodes.OK).json({ message: 'e-commerce API' });
 });

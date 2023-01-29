@@ -21,7 +21,7 @@ class AuthHandler {
     const role = firstUser ? 'ADMIN' : 'USER';
     const user = await User.create({ name, email, password, role });
     const tokenPayload = { name: user.name, userId: user._id, role: user.role };
-    JwtUtil.attachResponseToCookies(tokenPayload, res);
+    JwtUtil.attachCookiesToResponse(tokenPayload, res);
 
     res.status(StatusCodes.CREATED).json({ user: tokenPayload });
   }
