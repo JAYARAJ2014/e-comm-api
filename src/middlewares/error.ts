@@ -7,6 +7,7 @@ export const errorHandlerMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log(err);
   if (err instanceof CustomApiError) {
     return res.status(err.statusCode).json({ msg: err.message });
   }

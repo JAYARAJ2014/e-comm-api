@@ -1,5 +1,3 @@
-import { JwtUtil } from "./jwt"
+import { JwtUtil } from './jwt';
 
-export {
-    JwtUtil
-}
+export { JwtUtil };

@@ -5,7 +5,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { BadRequestError, UnAuthorizedError } from '../custom-errors/';
 import bcrypt from 'bcryptjs';
 import { rmSync } from 'fs';
-import { JwtUtil } from  '../utils/'
+import { JwtUtil } from '../utils/';
 
 class AuthHandler {
   public async register(req: Request, res: Response) {
@@ -21,8 +21,12 @@ class AuthHandler {
     const role = firstUser ? 'ADMIN' : 'USER';
     const user = await User.create({ name, email, password, role });
     const tokenPayload = { name: user.name, userId: user._id, role: user.role };
-    const token =  JwtUtil.createJwtToken(tokenPayload)
-    res.status(StatusCodes.CREATED).json({ user: tokenPayload, token });
+    const token = JwtUtil.createJwtToken(tokenPayload);
+    res.cookie('token', token, {
+      maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true
+    });
+    res.status(StatusCodes.CREATED).json({ user: tokenPayload });
   }
   public async login(req: Request, res: Response) {
     const { email, password } = req.body;
