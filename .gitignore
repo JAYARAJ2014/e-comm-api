@@ -106,4 +106,4 @@ dist
 # Build output
 bin/
 
-.vscode
+.vscode/
