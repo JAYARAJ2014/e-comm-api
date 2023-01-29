@@ -28,8 +28,12 @@ usersRouter
     authMiddleware.authenticate,
     handleAsyncMiddleware(usersHandler.getSingleUser)
   );
-usersRouter.route('/:id').patch(handleAsyncMiddleware(usersHandler.updateUser));
 usersRouter
   .route('/password')
-  .patch(handleAsyncMiddleware(usersHandler.updateUserPassword));
+  .patch(
+    authMiddleware.authenticate,
+    handleAsyncMiddleware(usersHandler.updateUserPassword)
+  );
 usersRouter.route('/').post(handleAsyncMiddleware(usersHandler.createUser));
+
+usersRouter.route('/:id').patch(handleAsyncMiddleware(usersHandler.updateUser));

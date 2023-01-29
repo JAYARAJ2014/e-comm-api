@@ -42,6 +42,29 @@ export class UsersHandler {
     res.send('updateUser');
   }
   public async updateUserPassword(req: Request, res: Response) {
-    res.send('getAllUsers');
+    const { currentPassword, newPassword } = req.body;
+    if (!req.user) {
+      throw new UnAuthorizedError('You are not logged in');
+    }
+    if (!currentPassword || !newPassword) {
+      throw new BadRequestError(
+        'Both current and new password must be provided'
+      );
+    }
+
+    const userId = req.user?.userId;
+    const user = await User.findOne({ _id: userId });
+    if (!user) {
+      throw new UnAuthorizedError('You are not logged in');
+    }
+    const doesPasswordsMatch = await user?.comparePasswordHash(currentPassword);
+
+    if (!doesPasswordsMatch) {
+      throw new UnAuthorizedError('Password incorrect.');
+    }
+
+    user.password = newPassword;
+    await user.save();
+      res.status(StatusCodes.OK).json({ message: "Password updated"});
   }
 }
