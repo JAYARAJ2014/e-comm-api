@@ -13,10 +13,10 @@ export interface IUser {
   role: UserRoleEnum;
 }
 export interface IHashComparable {
-    comparePasswordHash():boolean;
+  comparePasswordHash(): boolean;
 }
 
-const UserSchema = new Schema<IUser,IHashComparable>({
+const UserSchema = new Schema<IUser, IHashComparable>({
   name: {
     type: String,
     required: [
@@ -45,11 +45,11 @@ const UserSchema = new Schema<IUser,IHashComparable>({
 });
 
 UserSchema.pre('save', async function name() {
-    const salt = await bcrypt.genSalt(10);
-    this.password=await bcrypt.hash(this.password, salt)
-})
-UserSchema.method('comparePasswordHash',async function (inputPassword){
-    const isMatch = await bcrypt.compare(inputPassword, this.password);
-    return true; 
-})
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+UserSchema.method('comparePasswordHash', async function (inputPassword) {
+  const isMatch = await bcrypt.compare(inputPassword, this.password);
+  return true;
+});
 export const User = model<IUser>('User', UserSchema);
