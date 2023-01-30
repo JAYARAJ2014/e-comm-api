@@ -1,6 +1,4 @@
 import mongoose, { Schema, model } from 'mongoose';
-import validator from 'validator';
-import bcrypt from 'bcryptjs';
 import { IUser } from './user';
 
 export interface IProduct {
@@ -71,7 +69,4 @@ const ProductSchema = new Schema<IProduct>(
 ProductSchema.pre('save', async function name() {
   console.log('save invoked');
 });
-// UserSchema.method('comparePasswordHash', async function (inputPassword) {
-//   return await bcrypt.compare(inputPassword, this.password);
-// });
 export const Product = model<IProduct>('Product', ProductSchema);
