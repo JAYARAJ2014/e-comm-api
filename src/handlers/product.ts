@@ -33,3 +33,5 @@ class ProductHandler {
     }
 
 }
+
+export const productHandler = new ProductHandler();

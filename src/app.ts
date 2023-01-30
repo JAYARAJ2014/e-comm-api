@@ -11,6 +11,7 @@ import morgan from 'morgan';
 import { authRouter } from './routes/auth';
 import cookieParser from 'cookie-parser';
 import { usersRouter } from './routes/users';
+import { productRouter } from './routes/product';
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
@@ -26,6 +27,7 @@ app.use(cookieParser(COOKIE_SECRET));
 
 app.use(`${BASE_URL}/auth`, authRouter);
 app.use(`${BASE_URL}/users`, usersRouter);
+app.use(`${BASE_URL}/products`, productRouter);
 app.use('/', (req: Request, res: Response) => {
   console.log(req.signedCookies);
 
