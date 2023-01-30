@@ -5,7 +5,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { BadRequestError, UnAuthorizedError } from '../custom-errors/';
 import bcrypt from 'bcryptjs';
 import { rmSync } from 'fs';
-import { JwtUtil } from '../utils/';
+import { JwtUtil } from '../utils/jwt';
 
 class AuthHandler {
   public async register(req: Request, res: Response) {
