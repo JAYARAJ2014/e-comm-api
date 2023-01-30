@@ -41,7 +41,7 @@ productRouter
     handleAsyncMiddleware(productHandler.updateProduct)
   );
 productRouter
-  .route('/uploadImage/:id')
+  .route('/images/:id')
   .patch(
     authMiddleware.authenticate,
     authMiddleware.authorizeByRole(UserRoleEnum.ADMIN),
