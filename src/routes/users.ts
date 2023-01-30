@@ -36,4 +36,9 @@ usersRouter
   );
 usersRouter.route('/').post(handleAsyncMiddleware(usersHandler.createUser));
 
-usersRouter.route('/:id').patch(handleAsyncMiddleware(usersHandler.updateUser));
+usersRouter
+  .route('/')
+  .patch(
+    authMiddleware.authenticate,
+    handleAsyncMiddleware(usersHandler.updateCurrentUser)
+  );

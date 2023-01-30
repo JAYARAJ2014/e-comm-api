@@ -10,6 +10,7 @@ import {
 import bcrypt from 'bcryptjs';
 import { rmSync } from 'fs';
 import { JwtUtil } from '../utils';
+import { userInfo } from 'os';
 
 export class UsersHandler {
   public async createUser(req: Request, res: Response) {
@@ -38,8 +39,24 @@ export class UsersHandler {
   public async showCurrentUser(req: Request, res: Response) {
     res.status(StatusCodes.OK).json({ user: req.user });
   }
-  public async updateUser(req: Request, res: Response) {
-    res.send('updateUser');
+  public async updateCurrentUser(req: Request, res: Response) {
+   console.log('Update invoked')
+      const { email, name } = req.body;
+    if (!email || !name) {
+      throw new BadRequestError('email & name must be provided');
+    }
+
+    const user = await User.findOneAndUpdate(
+      { _id: req.user?.userId },
+      { email, name },
+      { new: true, runValidators: true }
+    );
+      if (!user) {
+        throw new NotFoundError("Specified user does not exist")
+    }
+    const tokenPayload = { name: user.name, userId: user._id, role: user.role };
+    JwtUtil.attachCookiesToResponse(tokenPayload, res);
+    res.status(StatusCodes.OK).json({ user: user });
   }
   public async updateUserPassword(req: Request, res: Response) {
     const { currentPassword, newPassword } = req.body;
@@ -65,6 +82,6 @@ export class UsersHandler {
 
     user.password = newPassword;
     await user.save();
-      res.status(StatusCodes.OK).json({ message: "Password updated"});
+    res.status(StatusCodes.OK).json({ message: 'Password updated' });
   }
 }
