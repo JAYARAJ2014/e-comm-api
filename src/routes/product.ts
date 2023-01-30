@@ -3,11 +3,47 @@ import { Router } from 'express';
 import 'express-async-errors';
 import { handleAsyncMiddleware, authMiddleware } from '../middlewares/';
 import { productHandler } from '../handlers/product';
+import { UserRoleEnum } from '../models/user';
 export const productRouter: Router = Router();
 
-productRouter.post('/', handleAsyncMiddleware(productHandler.createProduct));
-productRouter.delete('/:id', handleAsyncMiddleware(productHandler.deleteProduct)); 
-productRouter.get('/:id', handleAsyncMiddleware(productHandler.getSingleProduct)); 
-productRouter.get('/', handleAsyncMiddleware(productHandler.getAllProducts)); 
-productRouter.patch('/:id', handleAsyncMiddleware(productHandler.updateProduct)); 
-productRouter.patch('/uploadImage/:id', handleAsyncMiddleware(productHandler.uploadImage)); 
+productRouter
+  .route('/')
+  .post(
+    authMiddleware.authenticate,
+    authMiddleware.authorizeByRole(UserRoleEnum.ADMIN),
+    handleAsyncMiddleware(productHandler.createProduct)
+  );
+
+productRouter
+  .route('/:id')
+  .delete(
+    authMiddleware.authenticate,
+    authMiddleware.authorizeByRole(UserRoleEnum.ADMIN),
+    handleAsyncMiddleware(productHandler.deleteProduct)
+  );
+productRouter
+  .route('/:id')
+  .get(
+    authMiddleware.authenticate,
+    handleAsyncMiddleware(productHandler.getSingleProduct)
+  );
+productRouter
+  .route('/')
+  .get(
+    authMiddleware.authenticate,
+    handleAsyncMiddleware(productHandler.getAllProducts)
+  );
+productRouter
+  .route('/:id')
+  .patch(
+    authMiddleware.authenticate,
+    authMiddleware.authorizeByRole(UserRoleEnum.ADMIN),
+    handleAsyncMiddleware(productHandler.updateProduct)
+  );
+productRouter
+  .route('/uploadImage/:id')
+  .patch(
+    authMiddleware.authenticate,
+    authMiddleware.authorizeByRole(UserRoleEnum.ADMIN),
+    handleAsyncMiddleware(productHandler.uploadImage)
+  );
