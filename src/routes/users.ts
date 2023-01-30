@@ -25,8 +25,8 @@ usersRouter
 usersRouter
   .route('/:id')
   .get(
-      authMiddleware.authenticate,
-   handleAsyncMiddleware(usersHandler.getSingleUser)
+    authMiddleware.authenticate,
+    handleAsyncMiddleware(usersHandler.getSingleUser)
   );
 usersRouter
   .route('/password')

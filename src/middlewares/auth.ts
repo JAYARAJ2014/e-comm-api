@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { ForbiddenError, UnAuthorizedError } from '../custom-errors/';
-import { JwtUtil } from  '../utils/jwt'
+import { JwtUtil } from '../utils/jwt';
 import { UserRoleEnum } from '../models/user';
 
 class AuthMiddleware {

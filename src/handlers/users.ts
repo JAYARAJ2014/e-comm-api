@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { IUser, User, UserRoleEnum } from '../models/user';
-import {  StatusCodes } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import {
   BadRequestError,
   NotFoundError,
@@ -28,13 +28,12 @@ export class UsersHandler {
       _id: userId,
       role: UserRoleEnum.USER
     }).select('-password');
-      
-    
+
     if (!user) {
       throw new NotFoundError(`User with id ${userId} does not exist`);
     }
-      
-    Permissions.verify(req.user,user._id.toString())
+
+    Permissions.verify(req.user, user._id.toString());
 
     return res.status(StatusCodes.OK).json(user);
   }
