@@ -40,10 +40,14 @@ export class UsersHandler {
     res.status(StatusCodes.OK).json({ user: req.user });
   }
   public async updateCurrentUser(req: Request, res: Response) {
-   console.log('Update invoked')
-      const { email, name } = req.body;
+    console.log('Update invoked');
+    const { email, name } = req.body;
     if (!email || !name) {
       throw new BadRequestError('email & name must be provided');
+    }
+
+    if (!req.user) {
+      throw new UnAuthorizedError('Not logged in');
     }
 
     const user = await User.findOneAndUpdate(
@@ -51,8 +55,8 @@ export class UsersHandler {
       { email, name },
       { new: true, runValidators: true }
     );
-      if (!user) {
-        throw new NotFoundError("Specified user does not exist")
+    if (!user) {
+      throw new NotFoundError('Specified user does not exist');
     }
     const tokenPayload = { name: user.name, userId: user._id, role: user.role };
     JwtUtil.attachCookiesToResponse(tokenPayload, res);
