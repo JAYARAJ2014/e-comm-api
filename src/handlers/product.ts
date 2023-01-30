@@ -6,10 +6,13 @@ import { BadRequestError, UnAuthorizedError } from '../custom-errors/';
 import bcrypt from 'bcryptjs';
 import { rmSync } from 'fs';
 import { JwtUtil } from '../utils/jwt';
+import { IProduct, Product } from '../models/product';
 
 class ProductHandler {
   public async createProduct(req: Request, res: Response) {
-    res.send('Create Product');
+      req.body.user= req.user?.userId
+      const product: IProduct = await Product.create(req.body);
+    res.status(StatusCodes.CREATED).json({product})
   }
 
   public async getAllProducts(req: Request, res: Response) {

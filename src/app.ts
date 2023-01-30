@@ -28,6 +28,7 @@ app.use(cookieParser(COOKIE_SECRET));
 app.use(`${BASE_URL}/auth`, authRouter);
 app.use(`${BASE_URL}/users`, usersRouter);
 app.use(`${BASE_URL}/products`, productRouter);
+
 app.use('/', (req: Request, res: Response) => {
   console.log(req.signedCookies);
 
