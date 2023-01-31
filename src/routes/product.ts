@@ -23,16 +23,10 @@ productRouter
   );
 productRouter
   .route('/:id')
-  .get(
-    authMiddleware.authenticate,
-    handleAsyncMiddleware(productHandler.getSingleProduct)
-  );
+  .get(handleAsyncMiddleware(productHandler.getSingleProduct));
 productRouter
   .route('/')
-  .get(
-    authMiddleware.authenticate,
-    handleAsyncMiddleware(productHandler.getAllProducts)
-  );
+  .get(handleAsyncMiddleware(productHandler.getAllProducts));
 productRouter
   .route('/:id')
   .patch(

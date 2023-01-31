@@ -21,7 +21,9 @@ class ProductHandler {
 
   public async getAllProducts(req: Request, res: Response) {
     const products: IProduct[] = await Product.find({}).select('-user');
-      res.status(StatusCodes.OK).json({ products: products, count: products.length } );
+    res
+      .status(StatusCodes.OK)
+      .json({ products: products, count: products.length });
   }
 
   public async getSingleProduct(req: Request, res: Response) {
@@ -36,8 +38,8 @@ class ProductHandler {
     res.status(StatusCodes.OK).json(product);
   }
 
-    public async updateProduct(req: Request, res: Response) {
-      console.log('Update requested: ', req.body)
+  public async updateProduct(req: Request, res: Response) {
+    console.log('Update requested: ', req.body);
     const product = await Product.findOneAndUpdate(
       { _id: req.params.id },
       req.body,
@@ -62,7 +64,7 @@ class ProductHandler {
         `Product with Id ${req.params.id} does not exist`
       );
     }
-      await product.remove();
+    await product.remove();
     res
       .status(StatusCodes.OK)
       .json({ message: `Product Deleted`, product: product });
