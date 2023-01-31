@@ -36,7 +36,8 @@ class ProductHandler {
     res.status(StatusCodes.OK).json(product);
   }
 
-  public async updateProduct(req: Request, res: Response) {
+    public async updateProduct(req: Request, res: Response) {
+      console.log('Update requested: ', req.body)
     const product = await Product.findOneAndUpdate(
       { _id: req.params.id },
       req.body,
@@ -61,6 +62,7 @@ class ProductHandler {
         `Product with Id ${req.params.id} does not exist`
       );
     }
+      await product.remove();
     res
       .status(StatusCodes.OK)
       .json({ message: `Product Deleted`, product: product });
