@@ -1,0 +1,9 @@
+echo "*****Running prettify******"
+
+npm run prettify
+
+status=$?
+
+git stash pop -q
+
+exit $status
