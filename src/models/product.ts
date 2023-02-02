@@ -37,7 +37,7 @@ const ProductSchema = new Schema<IProduct>(
     },
     image: {
       type: String,
-      default: '/uploads/example.png'
+      default: '/images/example.png'
     },
     category: {
       type: String,

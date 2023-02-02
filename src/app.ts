@@ -12,6 +12,8 @@ import { authRouter } from './routes/auth';
 import cookieParser from 'cookie-parser';
 import { usersRouter } from './routes/users';
 import { productRouter } from './routes/product';
+import fileUpload  from 'express-fileupload';
+
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
@@ -24,7 +26,8 @@ app.use(morgan(MORGAN_LOG_FORMAT));
 
 app.use(express.json());
 app.use(cookieParser(COOKIE_SECRET));
-
+app.use(express.static('./public'));
+app.use(fileUpload())
 app.use(`${BASE_URL}/auth`, authRouter);
 app.use(`${BASE_URL}/users`, usersRouter);
 app.use(`${BASE_URL}/products`, productRouter);
