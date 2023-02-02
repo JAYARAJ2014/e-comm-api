@@ -80,6 +80,7 @@ class ProductHandler {
       throw new BadRequestError(`Upload size exceeds ${maxSize} bytes`);
     }
 
+    ///todo: save file with product name and original file extension
     const imagePath = path.join(__dirname, '../../public/images', image.name);
     await image.mv(imagePath);
     res.status(StatusCodes.OK).json({
