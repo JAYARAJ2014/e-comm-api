@@ -82,12 +82,10 @@ class ProductHandler {
 
     const imagePath = path.join(__dirname, '../../public/images', image.name);
     await image.mv(imagePath);
-    res
-      .status(StatusCodes.OK)
-      .json({
-        message: 'Image succesfully uploaded',
-        url: req.headers.host + `/images/${image.name}`
-      });
+    res.status(StatusCodes.OK).json({
+      message: 'Image succesfully uploaded',
+      url: req.headers.host + `/images/${image.name}`
+    });
   }
 }
 
