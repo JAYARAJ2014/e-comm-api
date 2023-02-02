@@ -13,6 +13,7 @@ import cookieParser from 'cookie-parser';
 import { usersRouter } from './routes/users';
 import { productRouter } from './routes/product';
 import fileUpload from 'express-fileupload';
+import { reviewRouter } from './routes/review';
 
 dotenv.config();
 
@@ -31,10 +32,10 @@ app.use(fileUpload());
 app.use(`${BASE_URL}/auth`, authRouter);
 app.use(`${BASE_URL}/users`, usersRouter);
 app.use(`${BASE_URL}/products`, productRouter);
+app.use(`${BASE_URL}/reviews`, reviewRouter);
 
 app.use('/', (req: Request, res: Response) => {
   console.log(req.signedCookies);
-
   res.status(StatusCodes.OK).json({ message: 'e-commerce API' });
 });
 
