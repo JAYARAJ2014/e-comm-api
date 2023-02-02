@@ -1,8 +1,6 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import {
-  BadRequestError,
-  NotFoundError} from '../custom-errors/';
+import { BadRequestError, NotFoundError } from '../custom-errors/';
 import { IProduct, Product } from '../models/product';
 import { UploadedFile } from 'express-fileupload';
 import path from 'path';
@@ -66,26 +64,30 @@ class ProductHandler {
   }
 
   public async uploadImage(req: Request, res: Response) {
-    
     if (!req.files) {
-      throw new BadRequestError("Thre are no files selected to upload")
+      throw new BadRequestError('Thre are no files selected to upload');
     }
-    const image :UploadedFile  = req.files?.image as UploadedFile;
-    if (!image ) {
-      throw new BadRequestError("No images found")
+    const image: UploadedFile = req.files?.image as UploadedFile;
+    if (!image) {
+      throw new BadRequestError('No images found');
     }
 
-    if (!image.mimetype.startsWith("image")) {
-      throw new BadRequestError("No images found")
+    if (!image.mimetype.startsWith('image')) {
+      throw new BadRequestError('No images found');
     }
     const maxSize = 1024 * 1024;
     if (image.size > maxSize) {
-      throw new BadRequestError (`Upload size exceeds ${maxSize} bytes`)
+      throw new BadRequestError(`Upload size exceeds ${maxSize} bytes`);
     }
-    
-    const imagePath = path.join(__dirname, '../../public/images',image.name);
-    await image.mv(imagePath)
-    res.status(StatusCodes.OK).json({message:"Image succesfully uploaded", url: req.headers.host + `/images/${image.name}`})
+
+    const imagePath = path.join(__dirname, '../../public/images', image.name);
+    await image.mv(imagePath);
+    res
+      .status(StatusCodes.OK)
+      .json({
+        message: 'Image succesfully uploaded',
+        url: req.headers.host + `/images/${image.name}`
+      });
   }
 }
 
