@@ -7,6 +7,12 @@ import path from 'path';
 
 class ReviewHandler {
   public async createReview(req: Request, res: Response) {
+    /***
+     * Check product in thebody
+     * Attach a user property
+     * create review
+     */
+
     res.status(StatusCodes.OK).json('createReview');
   }
   public async getAllReviews(req: Request, res: Response) {
