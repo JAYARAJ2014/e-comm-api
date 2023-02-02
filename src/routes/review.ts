@@ -14,24 +14,18 @@ reviewRouter
     authMiddleware.authorizeByRole(UserRoleEnum.USER),
     handleAsyncMiddleware(reviewHandler.createReview)
   );
-  reviewRouter
-  .route('/')
-  .get(
-     handleAsyncMiddleware(reviewHandler.getAllReviews)
-  );
-  reviewRouter
+reviewRouter.route('/').get(handleAsyncMiddleware(reviewHandler.getAllReviews));
+reviewRouter
   .route('/:id')
-  .get(
-     handleAsyncMiddleware(reviewHandler.getSingleReview)
-  );
-  reviewRouter
+  .get(handleAsyncMiddleware(reviewHandler.getSingleReview));
+reviewRouter
   .route('/:id')
   .patch(
     authMiddleware.authenticate,
     authMiddleware.authorizeByRole(UserRoleEnum.USER),
     handleAsyncMiddleware(reviewHandler.updateReview)
   );
-  reviewRouter
+reviewRouter
   .route('/:id')
   .delete(
     authMiddleware.authenticate,
