@@ -39,7 +39,12 @@ class ReviewHandler {
     res.status(StatusCodes.OK).json(review);
   }
   public async getAllReviews(req: Request, res: Response) {
-    const reviews = await Review.find({});
+    const reviews = await Review.find({})
+      .populate({
+        path: 'product',
+        select: 'name price manufacturer'
+      })
+      .populate({ path: 'user', select: 'name' });
 
     res
       .status(StatusCodes.OK)
@@ -47,8 +52,12 @@ class ReviewHandler {
   }
   public async getSingleReview(req: Request, res: Response) {
     const { id: reviewId } = req.params;
-    const review = await Review.findOne({ _id: reviewId });
-
+    const review = await Review.findOne({ _id: reviewId })
+      .populate({
+        path: 'product',
+        select: 'name price manufacturer description'
+      })
+      .populate({ path: 'user', select: 'name' });
     if (!review) {
       throw new NotFoundError('Review not found');
     }
