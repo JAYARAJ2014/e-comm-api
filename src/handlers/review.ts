@@ -32,10 +32,20 @@ class ReviewHandler {
     res.status(StatusCodes.OK).json(review);
   }
   public async getAllReviews(req: Request, res: Response) {
-    res.send('getAllReviews');
+    const reviews = await Review.find({});
+
+    res
+      .status(StatusCodes.OK)
+      .json({ reviews: reviews, count: reviews.length });
   }
   public async getSingleReview(req: Request, res: Response) {
-    res.send('getSingleReview');
+    const { id: reviewId } = req.params;
+    const review = await Review.findOne({ _id: reviewId });
+
+    if (!review) {
+      throw new NotFoundError('Review not found');
+    }
+    res.status(StatusCodes.OK).json(review);
   }
 
   public async updateReview(req: Request, res: Response) {
