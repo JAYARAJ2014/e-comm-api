@@ -56,8 +56,32 @@ class ReviewHandler {
   }
 
   public async updateReview(req: Request, res: Response) {
-    res.send('updateReview');
+    const { id: reviewId } = req.params;
+
+    const review = await Review.findOne({ _id: reviewId });
+
+    if (!review) {
+      throw new NotFoundError('Review not found');
+    }
+    console.log(`req.user?.role`, req.user?.role);
+    console.log(`req.user.userId `, req.user?.userId);
+    console.log(`review.user`, review.user);
+
+    if (req.user?.userId === (review.user as string)) {
+      throw new UnAuthorizedError(
+        'Onlycreator of the review is allowed to update it'
+      );
+    }
+    const { rating, title, comment } = req.body;
+    review.rating = rating;
+    review.title = title;
+    review.comment = comment;
+
+    await review.save();
+
+    res.status(StatusCodes.OK).json({ messgae: 'Updated review', review });
   }
+
   public async deleteReview(req: Request, res: Response) {
     const { id: reviewId } = req.params;
 
