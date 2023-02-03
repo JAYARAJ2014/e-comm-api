@@ -13,18 +13,21 @@ class ReviewHandler {
      * Attach a user property
      * create review
      */
-      const { product: productId } = req.body;
-      const validProduct = Product.findOne({ _id: productId });
-      if (!validProduct) {
-          throw new NotFoundError("The product you have specified does not exist")
-      }
-      
-      const alreadyReviewed = await Review.findOne({product:productId, user:req.user?.userId})
-      if (alreadyReviewed) {
-          throw new BadRequestError("You have already reviewed this product")
-      }
+    const { product: productId } = req.body;
+    const validProduct = Product.findOne({ _id: productId });
+    if (!validProduct) {
+      throw new NotFoundError('The product you have specified does not exist');
+    }
 
-      const review = await Review.create({ ...req.body, user: req.user?.userId })
+    const alreadyReviewed = await Review.findOne({
+      product: productId,
+      user: req.user?.userId
+    });
+    if (alreadyReviewed) {
+      throw new BadRequestError('You have already reviewed this product');
+    }
+
+    const review = await Review.create({ ...req.body, user: req.user?.userId });
 
     res.status(StatusCodes.OK).json(review);
   }
