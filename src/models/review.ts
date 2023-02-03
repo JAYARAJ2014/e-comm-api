@@ -6,7 +6,7 @@ export interface IReview {
   title: string;
   comment: string;
   product: mongoose.Schema.Types.ObjectId;
-  user: mongoose.Schema.Types.ObjectId;
+  user: mongoose.Schema.Types.ObjectId | string;
 }
 
 const ReviewSchema = new Schema<IReview>(

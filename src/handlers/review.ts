@@ -1,10 +1,17 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { BadRequestError, NotFoundError } from '../custom-errors/';
+import {
+  BadRequestError,
+  NotFoundError,
+  UnAuthorizedError
+} from '../custom-errors/';
 import { IProduct, Product } from '../models/product';
 import { UploadedFile } from 'express-fileupload';
 import path from 'path';
 import { Review } from '../models/review';
+import { User, UserRoleEnum } from '../models/user';
+import { userInfo } from 'os';
+import mongoose, { ObjectId } from 'mongoose';
 
 class ReviewHandler {
   public async createReview(req: Request, res: Response) {
@@ -52,7 +59,31 @@ class ReviewHandler {
     res.send('updateReview');
   }
   public async deleteReview(req: Request, res: Response) {
-    res.send('deleteReview');
+    const { id: reviewId } = req.params;
+
+    const review = await Review.findOne({ _id: reviewId });
+
+    if (!review) {
+      throw new NotFoundError('Review not found');
+    }
+    console.log(`req.user?.role`, req.user?.role);
+    console.log(`req.user.userId `, req.user?.userId);
+    console.log(`review.user`, review.user);
+
+    if (
+      req.user?.role === UserRoleEnum.ADMIN ||
+      req.user?.userId === (review.user as string)
+    ) {
+      throw new UnAuthorizedError(
+        'Only admin or creator of the review is allowed to delete the review'
+      );
+    }
+
+    const removed = await review.remove();
+
+    res
+      .status(StatusCodes.OK)
+      .json({ messgae: 'Removed review', review: removed });
   }
 }
 
