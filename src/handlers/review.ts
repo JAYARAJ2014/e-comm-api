@@ -4,6 +4,7 @@ import { BadRequestError, NotFoundError } from '../custom-errors/';
 import { IProduct, Product } from '../models/product';
 import { UploadedFile } from 'express-fileupload';
 import path from 'path';
+import { Review } from '../models/review';
 
 class ReviewHandler {
   public async createReview(req: Request, res: Response) {
@@ -12,8 +13,20 @@ class ReviewHandler {
      * Attach a user property
      * create review
      */
+      const { product: productId } = req.body;
+      const validProduct = Product.findOne({ _id: productId });
+      if (!validProduct) {
+          throw new NotFoundError("The product you have specified does not exist")
+      }
+      
+      const alreadyReviewed = await Review.findOne({product:productId, user:req.user?.userId})
+      if (alreadyReviewed) {
+          throw new BadRequestError("You have already reviewed this product")
+      }
 
-    res.status(StatusCodes.OK).json('createReview');
+      const review = await Review.create({ ...req.body, user: req.user?.userId })
+
+    res.status(StatusCodes.OK).json(review);
   }
   public async getAllReviews(req: Request, res: Response) {
     res.send('getAllReviews');

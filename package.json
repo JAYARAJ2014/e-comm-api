@@ -6,8 +6,8 @@
     "start": "node ./bin/app.js",
     "dev": "nodemon ./src/app.ts",
     "build": "tsc",
-    "prettify": "prettier --config .prettierrc 'src/**/*.ts' --write",
-    "prestart": "cp scripts/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit && echo 'hook copied'"
+    "prettify": "prettier --config .prettierrc 'src/**/*.ts' --write"
+    
   },
   "keywords": [],
   "author": "",
