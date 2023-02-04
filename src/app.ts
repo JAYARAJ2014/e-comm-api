@@ -5,7 +5,8 @@ import { connectDb } from './db/connect';
 import {
   notFoundMiddleware,
   errorHandlerMiddleware,
-  handleAsyncMiddleware
+  handleAsyncMiddleware,
+  requestContext
 } from './middlewares';
 import morgan from 'morgan';
 import { authRouter } from './routes/auth';
@@ -26,6 +27,7 @@ const app: Express = express();
 app.use(morgan(MORGAN_LOG_FORMAT));
 
 app.use(express.json());
+app.use(requestContext);
 app.use(cookieParser(COOKIE_SECRET));
 app.use(express.static('./public'));
 app.use(fileUpload());
