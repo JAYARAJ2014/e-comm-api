@@ -118,6 +118,12 @@ class ReviewHandler {
       .status(StatusCodes.OK)
       .json({ messgae: 'Removed review', review: removed });
   }
+
+  public async getSingleProductReviews(req: Request, res: Response) {
+    const { id: productId } = req.params;
+    const reviews = await Review.find({ product: productId });
+    res.status(StatusCodes.OK).json({ reviews, count: reviews.length || 0 });
+  }
 }
 
 export const reviewHandler = new ReviewHandler();

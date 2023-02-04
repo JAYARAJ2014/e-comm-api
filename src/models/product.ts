@@ -1,5 +1,6 @@
 import mongoose, { Schema, model } from 'mongoose';
 import { IUser } from './user';
+import { Review } from './review';
 
 export interface IProduct {
   name: string;
@@ -71,7 +72,11 @@ ProductSchema.virtual('reviews', {
   foreignField: 'product',
   justOne: false
 });
-ProductSchema.pre('save', async function name() {
-  console.log('save invoked');
-});
+
+/***
+ * .remove() will trigger this hook
+ * We use this to remove associated reviews
+ ***/
+
+ProductSchema.pre('remove', async function removeAssociatedReviews() {});
 export const Product = model<IProduct>('Product', ProductSchema);
