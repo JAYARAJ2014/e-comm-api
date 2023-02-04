@@ -15,7 +15,8 @@ import { usersRouter } from './routes/users';
 import { productRouter } from './routes/product';
 import fileUpload from 'express-fileupload';
 import { reviewRouter } from './routes/review';
-
+import fs from 'fs';
+import path from 'path';
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
@@ -24,6 +25,7 @@ const BASE_URL = process.env.BASE_URL || '';
 const MORGAN_LOG_FORMAT = process.env.MORGAN_LOG_FORMAT || 'tiny';
 const COOKIE_SECRET = process.env.COOKIE_SECRET || 'secret';
 const app: Express = express();
+
 app.use(morgan(MORGAN_LOG_FORMAT));
 
 app.use(express.json());

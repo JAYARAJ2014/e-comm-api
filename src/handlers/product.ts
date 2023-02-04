@@ -20,9 +20,9 @@ class ProductHandler {
   }
 
   public async getSingleProduct(req: Request, res: Response) {
-    const product = await Product.findOne({ _id: req.params.id }).select(
-      '-user'
-    );
+    const product = await Product.findOne({ _id: req.params.id })
+      .select('-user')
+      .populate('reviews');
     if (!product) {
       throw new NotFoundError(
         `Product with Id ${req.params.id} does not exist`
