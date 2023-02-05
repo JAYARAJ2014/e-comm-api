@@ -14,6 +14,7 @@ export interface IProduct {
   freeShipping: boolean;
   inventory: number;
   averageRating: number;
+  reviewCount: number;
   user: IUser;
 }
 
@@ -62,6 +63,7 @@ const ProductSchema = new Schema<IProduct>(
     freeShipping: { type: Boolean, default: false },
     inventory: { type: Number, min: 0, required: true, default: 0 },
     averageRating: { type: Number, default: 0 },
+    reviewCount: { type: Number, default: 0 },
     user: { type: mongoose.Types.ObjectId, ref: 'User', required: true }
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
@@ -78,5 +80,10 @@ ProductSchema.virtual('reviews', {
  * We use this to remove associated reviews
  ***/
 
-ProductSchema.pre('remove', async function removeAssociatedReviews() {});
+ProductSchema.pre('remove', async function removeAssociatedReviews() {
+  /*
+  Figure out how to access _id
+  How to access Review Model and deleteMany reviews.
+  */
+});
 export const Product = model<IProduct>('Product', ProductSchema);

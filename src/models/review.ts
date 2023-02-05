@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from 'mongoose';
+import mongoose, { ObjectId, Schema, model } from 'mongoose';
 import validator from 'validator';
 
 export interface IReview {
@@ -7,6 +7,7 @@ export interface IReview {
   comment: string;
   product: mongoose.Schema.Types.ObjectId;
   user: mongoose.Schema.Types.ObjectId | string;
+  calculateAverageRating(productId: mongoose.Schema.Types.ObjectId): number;
 }
 
 const ReviewSchema = new Schema<IReview>(
@@ -44,5 +45,27 @@ const ReviewSchema = new Schema<IReview>(
   { timestamps: true }
 );
 
+ReviewSchema.static('calculateAverageRating', async function (productId) {
+  const result = await this.aggregate([
+    {
+      $match: { product: productId }
+    },
+    {
+      $group: {
+        _id: null,
+        averageRating: {
+          $avg: '$rating'
+        },
+        reviewCount: {
+          $sum: 1
+        }
+      }
+    }
+  ]);
+  console.log(result);
+});
+
 ReviewSchema.index({ product: 1, user: 1 }, { unique: true });
+ReviewSchema.post('save', async function () {});
+ReviewSchema.post('remove', async function () {});
 export const Review = model<IReview>('Review', ReviewSchema);
